@@ -2,12 +2,13 @@ CC = $(CROSS_COMPILE)gcc
 
 CFLAGS = -Wall -Werror
 
-writer: writer.o
-	 $(CC) $(CFLAGS) -o writer writer.o
+all: writerObj writerC
+
+writerObj: writer.o
+	$(CC) $(CFLAGS) -o writer writer.o
 	 
-writer.o: writer.c
-	 $(CC) $(CFLAGS) -c writer.c
+writerC: writer.c
+	$(CC) $(CFLAGS) -c writer.c
 
 clean: 
-	 rm -f  *.o  \
-	        writer 
+	-rm -f *.o $(TARGET) *.elf *.map
