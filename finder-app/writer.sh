@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #Writer Script
 #Chris Choi
 #AESD CU Boulder Fall 2021

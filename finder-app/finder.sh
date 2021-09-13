@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #Finder script
 #Chris Choi
 #AESD CU Boulder Fall 2021
