@@ -72,25 +72,34 @@ bool do_exec(int count, ...)
  *   
 */
     
+    //save status
     int status;
+    
+    //fork
     pid_t pid = fork();
 
+    //check for fork error
     if (pid == -1) {
         perror("ERROR: Failed to fork()...");
         return false;
     }
+    //if pid equals zero..
     else if (pid == 0) 
     {
+        //execv and perror then exit
         execv(command[0], command);
         perror("ERROR: exec() failure...");
         exit(-1);
     }
+    //for non-zero value
     else {
+        //check for waitpid error
         if (waitpid(pid, &status, 0) == -1) 
         {
             perror("ERROR: waitpid failure...");
             return false;
         }
+        //ensure child process closure
         else if (WIFEXITED(status) == true && WEXITSTATUS(status) != 0) 
         {
             return false;
