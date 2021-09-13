@@ -16,8 +16,21 @@ bool do_system(const char *cmd)
  *   and return a boolean true if the system() call completed with success 
  *   or false() if it returned a failure
 */
+    //Check for NULL
+    if(cmd == NULL)
+    return false;
 
-    return true;
+    //Call system function with cmd in parameter
+    int syscmd = system(cmd);
+    
+    //Check return from system call
+    WIFEXITED(syscmd);
+
+    if (syscmd == true)
+    	return true;
+    else
+    	return false;
+
 }
 
 /**
@@ -58,9 +71,33 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *   
 */
+    
+    int status;
+    pid_t pid = fork();
+
+    if (pid == -1) {
+        perror("ERROR: Failed to fork()...");
+        return false;
+    }
+    else if (pid == 0) 
+    {
+        execv(command[0], command);
+        perror("ERROR: exec() failure...");
+        exit(-1);
+    }
+    else {
+        if (waitpid(pid, &status, 0) == -1) 
+        {
+            perror("ERROR: waitpid failure...");
+            return false;
+        }
+        else if (WIFEXITED(status) == true && WEXITSTATUS(status) != 0) 
+        {
+            return false;
+        }
+    }
 
     va_end(args);
-
     return true;
 }
 
@@ -92,6 +129,54 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *   The rest of the behaviour is same as do_exec()
  *   
 */
+
+    int status;
+    pid_t pid;
+
+    int fd = open(outputfile, O_WRONLY|O_CREAT, 0644);
+
+    if (fd == -1) {
+        perror("ERROR: Failed to open file...");
+        return false;
+    }
+
+    pid = fork();
+
+    if (pid == -1) 
+    {
+    	perror("ERROR: Failed to fork...");
+        return false;
+    }
+    else if (pid == 0) 
+    {
+
+        if (dup2(fd, STDOUT_FILENO) < 0) 
+        {
+            perror("ERROR: Failed to call dup2...");
+            return false;
+        }
+
+        close(fd);
+
+        execv(command[0], command);
+
+        perror("ERROR: Failure in exec...");
+        exit(EXIT_FAILURE);
+    }
+    else 
+    {
+        close(fd);
+
+        if (waitpid(pid, &status, 0) == -1) 
+        {
+            perror("ERROR: Failed in status update in waitpid...");
+            return false;
+        }
+        else if ((WIFEXITED(status) == true) && (WEXITSTATUS(status) != 0)) 
+        {
+            return false;
+        }
+    }
 
     va_end(args);
     
