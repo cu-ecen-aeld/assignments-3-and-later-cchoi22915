@@ -331,7 +331,7 @@ void* threadHandler(void* thread_param)
     //set thread flag
     threadParamValues->threadFlag = true;
 
-    return NULL;
+    return thread_param;
 }
 
 //signal handler
@@ -576,6 +576,8 @@ int main(int argc, char *argv[])
 
         //free pointer
         free(linkedListPtr);
+
+        linkedListPtr = NULL;
     }
 
 	//close files
