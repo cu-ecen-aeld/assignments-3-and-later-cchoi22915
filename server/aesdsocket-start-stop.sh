@@ -9,7 +9,7 @@ case "$1" in
 	
    stop)
 	echo "Stopping AESD Socket Server"
-	start-stop-daemon -K -n aesdsocket
+	start-stop-daemon -K -n aesdsocket --signal TERM
 	;;
 	
       *)
