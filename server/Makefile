@@ -16,7 +16,7 @@ default:	aesdsocket
 aesdsocket.o:       aesdsocket.c
 	$(CC) $(CFLAGS) -c aesdsocket.c $(LDFLAGS)
 
-aesdsocket:	aesdsocket.o
+aesdsocket: aesdsocket.o
 	$(CC) $(CFLAGS)  aesdsocket.o -o aesdsocket $(LDFLAGS)
 
 clean:
