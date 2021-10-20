@@ -313,7 +313,7 @@ void* threadHandler(void* thread_param)
         
         //send data
         int sendReturn = send(threadParamValues->threadFd, bufferAppend2, toSendSize, 0);
-        if(sendReturn == -1)
+        if(sendReturn == FAILURE)
         {
                 syslog(LOG_ERR,"ERROR: Failed to send data...");
                 return NULL;
@@ -331,7 +331,7 @@ void* threadHandler(void* thread_param)
     //set thread flag
     threadParamValues->threadFlag = true;
 
-    return thread_param;
+    return NULL;
 }
 
 //signal handler
