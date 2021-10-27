@@ -153,8 +153,6 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	        return retval;
 		}
 	 }
-
-	//copy from kernel space to user space
 	bytes_remaining = copy_from_user((void *)(&my_device->entry.buffptr[my_device->entry.size]), buf, count);
 	
 	//set return value by calculating count - bytes remaining and add to entry size
