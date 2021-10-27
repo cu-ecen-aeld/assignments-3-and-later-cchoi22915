@@ -10,12 +10,14 @@
 
 #ifdef __KERNEL__
 #include <linux/string.h>
+#include <linux/slab.h>
 #else
 #include <string.h>
+#include <stdio.h>
 #endif
 
 #include "aesd-circular-buffer.h"
-#include <stdio.h>
+
 #include <stdlib.h>
 
 /**
@@ -105,7 +107,8 @@ void aesd_circular_buffer_cleanup(struct aesd_circular_buffer *buffer)
 #ifdef __KERNEL__
 		kfree(entry->buffptr);
 #else
-		free(entry->buffptr);	
+		//free(entry->buffptr);	
 #endif
 
 	}
+}
