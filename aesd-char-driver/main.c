@@ -166,9 +166,7 @@ ssize_t aesd_write(struct file *filp, const char __user *buf, size_t count,
 	if (line_position != NULL) 
 	{
 		//add entry and check return
-		buffer_ret = aesd_circular_buffer_add_entry(&my_device->buff, &my_device->entry);
-	   	if (buffer_ret != NULL) 
-			kfree(buffer_ret);
+		aesd_circular_buffer_add_entry(&my_device->buff, &my_device->entry);
 	   
 		//set size and ptr to 0
 	  	my_device->entry.size = 0;
@@ -243,7 +241,7 @@ void aesd_cleanup_module(void)
 	/**
 	 * TODO: cleanup AESD specific poritions here as necessary
 	 */
-	aesd_circular_buffer_release(&aesd_device.buff);
+	aesd_circular_buffer_cleanup(&aesd_device.buff);
 	unregister_chrdev_region(devno, 1);
 }
 
