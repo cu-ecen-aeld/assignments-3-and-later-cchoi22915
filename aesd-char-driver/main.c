@@ -91,7 +91,6 @@ ssize_t aesd_read(struct file *filp, char __user *buf, size_t count,
 	if(count < buffer_bytes)
 	   buffer_bytes = count;
 	
-	//copy and set retval, check retval for fault
 	retval = copy_to_user(buf, (read_entry->buffptr + buffer_offset), buffer_bytes);
 	if (retval != 0)
 	{
