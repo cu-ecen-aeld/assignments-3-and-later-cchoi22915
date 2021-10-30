@@ -10,8 +10,10 @@
 
 #ifdef __KERNEL__
 #include <linux/string.h>
+#include <linux/slab.h>
 #else
 #include <string.h>
+#include <stdio.h>
 #endif
 
 #include "aesd-circular-buffer.h"
@@ -88,4 +90,24 @@ void aesd_circular_buffer_add_entry(struct aesd_circular_buffer *buffer, const s
 void aesd_circular_buffer_init(struct aesd_circular_buffer *buffer)
 {
     memset(buffer,0,sizeof(struct aesd_circular_buffer));
+}
+
+
+void aesd_circular_buffer_cleanup(struct aesd_circular_buffer *buffer)
+{
+	uint8_t index;
+	struct aesd_buffer_entry *entry;
+
+	AESD_CIRCULAR_BUFFER_FOREACH(entry,buffer,index) 
+	{
+		if (entry->buffptr == NULL) continue;
+		
+
+#ifdef __KERNEL__
+		kfree(entry->buffptr);
+#else
+		//free(entry->buffptr);	
+#endif
+
+	}
 }
